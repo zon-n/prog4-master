@@ -1,55 +1,31 @@
 #include <Arduino.h>
-#include <Servo.h>
+#include "input/input.h"
 
-int readChannel(int channelINput, int minLimit, int maxLimit, int defaultValue)
-{
-  int ch = pulseIn(channelINput, HIGH, 30000);
-  if (ch < 100)
-    return defaultValue;
-  return map(ch, 1000, 2000, minLimit, maxLimit);
+#define THROTTLE_PIN 9
+#define STEERING_PIN 10
+
+#define THROTTLE_CHANNEL 3
+#define STEERING_CHANNEL 4
+
+#define THROTTLE_MIN_PWM 1000
+#define THROTTLE_MAX_PWM 2000
+
+#define STEERING_MIN_PWM 1000
+#define STEERING_MAX_PWM 2000
+
+void setup() {
+
 }
 
-bool readSwitch(int channelInput, bool defaultValue) {
-  int intDefaultValue = (defaultValue)? 100 : 0;
-  int ch = readChannel(channelInput, 0, 100, intDefaultValue);
-  return (ch > 50);
+void loop() {
+  
 }
 
-Servo servo;
-
-void setup()
+void drive(Input input)
 {
-  Serial.begin(115200);
-  pinMode(0, INPUT);
-  pinMode(1, INPUT);
-  pinMode(2, INPUT);
-  pinMode(3, INPUT);
-  pinMode(4, INPUT);
-  pinMode(5, INPUT);
-  pinMode(6, INPUT);
+    int8_t throttle = input.getChannel(THROTTLE_CHANNEL);
+    int8_t steering = input.getChannel(STEERING_CHANNEL);
 
-
-  servo.attach(7);
-}
-
-void loop()
-{
-  int ch1Value = readChannel(1, -100, 100, 0);
-  Serial.println(ch1Value);
-  int ch2Value = readChannel(2, -100, 100, 0);
-  Serial.println(ch2Value);
-  int ch3Value = readChannel(3, 0, 100, 0);
-  Serial.println(ch3Value);
-  int ch4Value = readChannel(4, -100, 100, 0);
-  Serial.println(ch4Value);
-  int ch5Value = readChannel(5, 0, 100, 0);
-  Serial.println(ch5Value);
-  int ch6Value = readChannel(6, 0, 100, 0);
-  Serial.println(ch6Value);
-  Serial.println("__________________________________");
-  delay(1000);
-
-  // int angle = map(ch1Value, -100, 100, 180, 0);
-  // servo.write(angle);
-  // Serial.println(angle);
+    int throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
+    int steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
 }
