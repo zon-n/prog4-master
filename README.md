@@ -17,8 +17,8 @@ Le projet a pour objectif de concevoir et d’optimiser une voiture RC. Basée s
 * Microcontrôleur : Raspberry Pi Pico RP2040
 * Moteur : Brushless 3650 4000Kv
 * Alimentation : Batterie LiPo 5200mAh
-* Programmation: Framework Arduino avec C++ et Pico SDK
-* Matériau d'impression 3D: ABS, ASA et PETG
+* Programmation : Framework Arduino avec C++ et Pico SDK
+* Matériau d'impression 3D : ABS, ASA et PETG
 
 ## Algorithme de contrôle de traction
 L’algorithme utilise les données capturées par notre accéléromètre pour détecter la perte de traction et ajuster adéquatement la puissance du moteur à travers un contrôle PID.
