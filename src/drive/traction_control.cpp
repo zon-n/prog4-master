@@ -32,7 +32,23 @@ PID pid(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
     }
 
     void TractionControl::throttleControl(int ax, int ay, int az, int rx, int ry, int rz) {
-        // TODO: Implement this
+        double throttleOutput = 0;
+        double targetThrottle = 255;
+
+        bool derapage = (abs(ax) > 6 || abs(ay) < 6); // a ajuster
+
+        if(derapage) {
+            targetThrottle = throttleOutput * 0.5; // a ajuster
+        }
+
+        input = throttleOutput;
+        setpoint = targetThrottle;
+        pid.Compute();
+
+        int throttle = constrain(throttleOutput + output, 0, 255);
+
+        analogWrite(THROTTLE_PIN, throttle);
+
     }
 
     void TractionControl::controleDerapage(int ax, int ay, int az, int rx, int ry, int rz) {
