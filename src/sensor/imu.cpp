@@ -1,4 +1,5 @@
 #include "imu.h"
+#include "filtering.h"
 
 void IMU::start()
 {
@@ -17,19 +18,19 @@ void IMU::start()
 void IMU::update()
 {
     currentTime = millis();
-    if (currentTime - previousTime >= UPDATE_FREQUENCY)
+    dt = (currentTime - previousTime);
+    if (dt >= UPDATE_FREQUENCY)
     {
         read();
         updateAccel();
         updateGyro();
-        updateRotation();
         previousTime = currentTime;
     }
 }
 
 void IMU::read()
 {
-    mpu.getMotion6(&accelX, &accelY, &accelZ, &gyroX, &gyroY, &gyroZ);
+    mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
 }
 
 int16_t IMU::getAccelX()
@@ -64,15 +65,25 @@ int16_t IMU::getGyroZ()
 
 int16_t IMU::getPitch()
 {
-    return atan(-ax / sqrt(ay * ay + az * az)) * 180 / M_PI;
+    int16_t pitchAccelerometer = atan(-ax / sqrt(ay * ay + az * az)) * 180 / M_PI;
+    int16_t pitchGyro = pitchGyro + gx * dt / 1000;
+    int16_t pitch = filtering(pitchAccelerometer, pitchGyro, rotationTrustA, rotationTrustG);
+
+    return pitch;
 }
 
 int16_t IMU::getRoll()
 {
-    return atan(ay / sqrt(ax * ax + az * az)) * 180 / M_PI;
+    int16_t rollAccelerometer = atan(ay / sqrt(ax * ax + az * az)) * 180 / M_PI;
+    int16_t rollGyro = rollGyro + gy * dt / 1000;
+    int16_t roll = filtering(rollAccelerometer, rollGyro, rotationTrustA, rotationTrustG);
+    return roll;
 }
 
 int16_t IMU::getYaw()
 {
-    return atan(sqrt(ax * ax + ay * ay) / az) * 180 / M_PI;
+    int16_t yawAccelerometer = atan(sqrt(ax * ax + ay * ay) / az) * 180 / M_PI;
+    int16_t yawGyro = yawGyro + gz * dt / 1000;
+    int16_t yaw = filtering(yawAccelerometer, yawGyro, rotationTrustA, rotationTrustG);
+    return yaw;
 }

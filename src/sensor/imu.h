@@ -4,10 +4,15 @@
 
 struct IMU
 {
+    static constexpr int8_t GLOBAL_RAD = 175;
+
     static constexpr int16_t OFFSETS[6] = {0, 0, 0, 0, 0, 0};
     static constexpr int8_t SDA = 9;
     static constexpr int8_t SCL = 10;
     static constexpr int8_t UPDATE_FREQUENCY = 10;
+
+    static const int8_t rotationTrustA = 2;
+    static const int8_t rotationTrustG = 8;
 
     public:
         void start();
@@ -28,8 +33,9 @@ struct IMU
 
     private:
         MPU6050 mpu;
-        int previousTime;
-        int currentTime;
+        unsigned long previousTime;
+        unsigned long currentTime;
+        unsigned long dt;
 
         int16_t ax;
         int16_t ay;
@@ -39,7 +45,7 @@ struct IMU
         int16_t gy;
         int16_t gz;
 
-        int16_t pitch
+        int16_t pitch;
         int16_t roll;
         int16_t yaw;
 
@@ -51,7 +57,6 @@ struct IMU
         int16_t lastGyroY;
         int16_t lastGyroZ;
 
-        void updateRotation();
         void updateAccel();
         void updateGyro();
 };
