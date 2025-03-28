@@ -1,56 +1,65 @@
-#include <Arduino.h>
 #include "traction_control.h"
-#include <PID_v1.h>
-#include <Wire.h>
-#define THROTTLE_PIN 9 //Voir si on dois passer cela en argument
 
-double setpoint = 0;
-double input, output;
+void TractionControl::start()
+{
+    PID pid(&input, &output, &setpoint, kd, ki, kd, DIRECT);
+}
 
-double Kp = 2, Ki = 5, Kd = 1; //A ajuster
+Vecteur2 TractionControl::adjustDirection(Vecteur2 carBehaviour, Vecteur2 expectedBehaviour)
+{
+    // calculer erreur sur x
+    input = carBehaviour.x;
+    setpoint = expectedBehaviour.x;
+    pid.SetTunings(KP_DIRECTION, KD_DIRECTION, KI_DIRECTION);
 
-PID pid(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
+    pid.Compute();
+    double errorX = output;
 
-    void TractionControl::adjustStraightLine(int ax, int ay, int az, int rx, int ry, int rz) {
+    // calculer erreur sur y
+    input = carBehaviour.y;
+    setpoint = expectedBehaviour.y;
+    pid.SetTunings(KP_THROTTLE, KD_THROTTLE, KI_THROTTLE);
 
-        input = ry * 180 / M_PI;
+    pid.Compute();
+    double errorY = output;
 
-        pid.Compute();
+    Vecteur2 error = {errorX, errorY};
+    return error;
+}
 
-        int baselinePuissance = 100;//A ajuster
+Vecteur2 TractionControl::throttleControl(Vecteur2 carBehaviour)
+{   /*
+    double throttleOutput = 0;
+    double targetThrottle = 255;
 
-        //Verifier si on doit inverser les valeurs ou inverser les signes +/-, ou juste garder une correction que plutot deux.
-        int correctionPuissance = constrain(baselinePuissance + output, 0, 255); //constrain pour garder la valeur entre 0 et 255
-        int correctionPuissanceOppose = constrain(baselinePuissance - output, 0, 255);
+    // Regarder si il y a un top grand changement d'accel
+    // if (abs(carBehaviour.x - lastCarbehaviour.x) > maxDeltaX)
+    // {
+    //     double adjustedX = constrain(abs(carBehaviour.x - lastCarbehaviour.x), 0, maxDeltaX);
+    // }
+    // else
 
-        analogWrite(THROTTLE_PIN, correctionPuissance);
-        analogWrite(THROTTLE_PIN, correctionPuissanceOppose);
+    bool derapage = (abs(carBehaviour.x) > maxDeltaX)
+
+        if (derapage)
+    {
+        targetThrottle = throttleOutput * 0.5;
     }
 
-    void TractionControl::turnAssist(int ax, int ay, int az, int rx, int ry, int rz) {
-        // TODO: Implement this
-    }
+    input = throttleOutput;
+    setpoint = targetThrottle;
 
-    void TractionControl::throttleControl(int ax, int ay, int az, int rx, int ry, int rz) {
-        double throttleOutput = 0;
-        double targetThrottle = 255;
+    pid.SetTunings(KP_DIRECTIONv2, KD_DIRECTIONv2, KI_DIRECTIONv2);
+    pid.Compute();
 
-        bool derapage = (abs(ax) > 6 || abs(ay) < 6); // a ajuster
+    int throttle = constrain(throttleOutput + output, 0, 255);
 
-        if(derapage) {
-            targetThrottle = throttleOutput * 0.5; // a ajuster
-        }
+    return throttle;
 
-        input = throttleOutput;
-        setpoint = targetThrottle;
-        pid.Compute();
+    double adjustedY = constrain(abs(carBehaviour.x - lastCarbehaviour.x), 0, maxDeltaY);*/
+}
 
-        int throttle = constrain(throttleOutput + output, 0, 255);
-
-        analogWrite(THROTTLE_PIN, throttle);
-
-    }
-
-    void TractionControl::controleDerapage(int ax, int ay, int az, int rx, int ry, int rz) {
-        // TODO: Implement this
-    }
+Vecteur2 TractionControl::turnSpeedControl(Vecteur2 carBehaviour)
+{
+    // Ajuster la vitesse pendant les virages
+}
