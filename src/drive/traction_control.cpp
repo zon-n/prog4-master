@@ -2,64 +2,35 @@
 
 void TractionControl::start()
 {
-    PID pid(&input, &output, &setpoint, kd, ki, kd, DIRECT);
+    PID pidDirectionX(&inputDirectionX, &outputDirectionX, &setpointDirectionX, KP_DIRECTION_X, KD_DIRECTION_X, KI_DIRECTION_X, DIRECT);
+    PID pidDirectionY(&inputDirectionY, &outputDirectionY, &setpointDirectionY, KP_DIRECTION_Y, KD_DIRECTION_Y, KI_DIRECTION_Y, DIRECT);
+    PID pidThrottle(&inputThrottle, &outputThrottle, &setpointThrottle, KP_THROTTLE, KD_THROTTLE, KI_THROTTLE, DIRECT);
+    PID pidTurnSpeed(&inputTurnSpeed, &outputTurnSpeed, &setpointTurnSpeed, KP_TURN_SPEED, KD_TURN_SPEED, KI_TURN_SPEED, DIRECT);
 }
 
 Vecteur2 TractionControl::adjustDirection(Vecteur2 carBehaviour, Vecteur2 expectedBehaviour)
 {
     // calculer erreur sur x
-    input = carBehaviour.x;
-    setpoint = expectedBehaviour.x;
-    pid.SetTunings(KP_DIRECTION, KD_DIRECTION, KI_DIRECTION);
-
-    pid.Compute();
-    double errorX = output;
+    inputDirectionX = carBehaviour.x;
+    setpointDirectionX = expectedBehaviour.x;
+    pidDirectionX.Compute();
 
     // calculer erreur sur y
-    input = carBehaviour.y;
-    setpoint = expectedBehaviour.y;
-    pid.SetTunings(KP_THROTTLE, KD_THROTTLE, KI_THROTTLE);
+    inputDirectionY = carBehaviour.y;
+    setpointDirectionY = expectedBehaviour.y;
 
-    pid.Compute();
-    double errorY = output;
+    pidDirectionY.Compute();
 
-    Vecteur2 error = {errorX, errorY};
+    Vecteur2 error = {outputDirectionX, outputDirectionY};
     return error;
 }
 
 Vecteur2 TractionControl::throttleControl(Vecteur2 carBehaviour)
-{   /*
-    double throttleOutput = 0;
-    double targetThrottle = 255;
+{   
 
-    // Regarder si il y a un top grand changement d'accel
-    // if (abs(carBehaviour.x - lastCarbehaviour.x) > maxDeltaX)
-    // {
-    //     double adjustedX = constrain(abs(carBehaviour.x - lastCarbehaviour.x), 0, maxDeltaX);
-    // }
-    // else
-
-    bool derapage = (abs(carBehaviour.x) > maxDeltaX)
-
-        if (derapage)
-    {
-        targetThrottle = throttleOutput * 0.5;
-    }
-
-    input = throttleOutput;
-    setpoint = targetThrottle;
-
-    pid.SetTunings(KP_DIRECTIONv2, KD_DIRECTIONv2, KI_DIRECTIONv2);
-    pid.Compute();
-
-    int throttle = constrain(throttleOutput + output, 0, 255);
-
-    return throttle;
-
-    double adjustedY = constrain(abs(carBehaviour.x - lastCarbehaviour.x), 0, maxDeltaY);*/
 }
 
 Vecteur2 TractionControl::turnSpeedControl(Vecteur2 carBehaviour)
 {
-    // Ajuster la vitesse pendant les virages
+
 }

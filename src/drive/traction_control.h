@@ -7,29 +7,35 @@ class TractionControl
 {
 private:
     Vecteur2 lastCarbehaviour = {0, 0};
-    double maxDeltaX = 5; // TODO: Changeme
-    double maxDeltaY = 5; // TODO: Changeme
 
-    const double KP_DIRECTION = 0;
-    const double KI_DIRECTION = 0;
-    const double KD_DIRECTION = 0;
+    const double MAX_DELTA_YAW = 0.5; // maximum yaw rate in rad/s
+    const double MAX_DELTA_THROTTLE = 0.5; // maximum throttle change in m/s^2
+
+    const double KP_DIRECTION_X = 0;
+    const double KI_DIRECTION_X = 0;
+    const double KD_DIRECTION_X = 0;
+
+    const double KP_DIRECTION_Y = 0;
+    const double KI_DIRECTION_Y = 0;
+    const double KD_DIRECTION_Y = 0;
 
     const double KP_THROTTLE = 0;
     const double KI_THROTTLE = 0;
     const double KD_THROTTLE = 0;
 
-    
-    const double KP_DIRECTIONv2 = 0;
-    const double KI_DIRECTIONv2 = 0;
-    const double KD_DIRECTIONv2 = 0;
+    const double KP_TURN_SPEED = 0;
+    const double KI_TURN_SPEED = 0;
+    const double KD_TURN_SPEED = 0;
 
-    const double KP_THROTTLEv2 = 0;
-    const double KI_THROTTLEv2 = 0;
-    const double KD_THROTTLEv2 = 0;
+    PID pidDirectionX;
+    PID pidDirectionY;
+    PID pidThrottle;
+    PID pidTurnSpeed;
 
-    double input, output, setpoint;
-    double kp, ki, kd;
-    PID pid;
+    double inputDirectionX, outputDirectionX, setpointDirectionX;
+    double inputDirectionY, outputDirectionY, setpointDirectionY;
+    double inputThrottle, outputThrottle, setpointThrottle;
+    double inputTurnSpeed, outputTurnSpeed, setpointTurnSpeed;
 
 public:
     void start();
