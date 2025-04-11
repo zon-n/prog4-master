@@ -3,16 +3,80 @@
 
 void IMU::start()
 {
-    // Initialiser le MPU6050
-    mpu.initialize();
+    if (!mpu.begin())
+    {
+        Serial.println("MPU6050 mounting error");
+        while (1)
+        {
+            delay(10);
+        }
+    }
+    Serial.println("MPU6050 mounted");
 
-    // Régler le décalage des capteurs
-    mpu.setXAccelOffset(OFFSETS[0]);
-    mpu.setYAccelOffset(OFFSETS[1]);
-    mpu.setZAccelOffset(OFFSETS[2]);
-    mpu.setXGyroOffset(OFFSETS[3]);
-    mpu.setYGyroOffset(OFFSETS[4]);
-    mpu.setZGyroOffset(OFFSETS[5]);
+    mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+    Serial.print("Accelerometer range set to: ");
+    switch (mpu.getAccelerometerRange())
+    {
+    case MPU6050_RANGE_2_G:
+        Serial.println("+-2G");
+        break;
+    case MPU6050_RANGE_4_G:
+        Serial.println("+-4G");
+        break;
+    case MPU6050_RANGE_8_G:
+        Serial.println("+-8G");
+        break;
+    case MPU6050_RANGE_16_G:
+        Serial.println("+-16G");
+        break;
+    }
+    mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+    Serial.print("Gyro range set to: ");
+    switch (mpu.getGyroRange())
+    {
+    case MPU6050_RANGE_250_DEG:
+        Serial.println("+- 250 deg/s");
+        break;
+    case MPU6050_RANGE_500_DEG:
+        Serial.println("+- 500 deg/s");
+        break;
+    case MPU6050_RANGE_1000_DEG:
+        Serial.println("+- 1000 deg/s");
+        break;
+    case MPU6050_RANGE_2000_DEG:
+        Serial.println("+- 2000 deg/s");
+        break;
+    }
+
+    mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
+    Serial.print("Filter bandwidth set to: ");
+    switch (mpu.getFilterBandwidth())
+    {
+    case MPU6050_BAND_260_HZ:
+        Serial.println("260 Hz");
+        break;
+    case MPU6050_BAND_184_HZ:
+        Serial.println("184 Hz");
+        break;
+    case MPU6050_BAND_94_HZ:
+        Serial.println("94 Hz");
+        break;
+    case MPU6050_BAND_44_HZ:
+        Serial.println("44 Hz");
+        break;
+    case MPU6050_BAND_21_HZ:
+        Serial.println("21 Hz");
+        break;
+    case MPU6050_BAND_10_HZ:
+        Serial.println("10 Hz");
+        break;
+    case MPU6050_BAND_5_HZ:
+        Serial.println("5 Hz");
+        break;
+    }
+
+    Serial.println("");
+    delay(100);
 }
 
 void IMU::update()
@@ -21,16 +85,18 @@ void IMU::update()
     dt = (currentTime - previousTime);
     if (dt >= UPDATE_FREQUENCY)
     {
-        read();
-        updateAccel();
-        updateGyro();
+        /* Get new sensor events with the readings */
+        sensors_event_t a, g, temp;
+        mpu.getEvent(&a, &g, &temp);
+        ax = a.acceleration.x - OFFSETS[0];
+        ay = a.acceleration.y - OFFSETS[1];
+        az = a.acceleration.z - OFFSETS[2];
+        gx = g.gyro.x - OFFSETS[3];
+        gy = g.gyro.y - OFFSETS[4];
+        gz = g.gyro.z - OFFSETS[5];
+
         previousTime = currentTime;
     }
-}
-
-void IMU::read()
-{
-    mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
 }
 
 int16_t IMU::getAccelX()

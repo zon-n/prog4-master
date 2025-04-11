@@ -1,43 +1,31 @@
 #include <Arduino.h>
-#include "input/input.h"
+#include "sensor/imu.h"
 
-#define THROTTLE_PIN 9
-#define STEERING_PIN 10
-
-#define THROTTLE_CHANNEL 3
-#define STEERING_CHANNEL 4
-
-#define THROTTLE_MIN_PWM 1000
-#define THROTTLE_MAX_PWM 2000
-
-#define STEERING_MIN_PWM 1000
-#define STEERING_MAX_PWM 2000
-
-Input input;
+IMU imu;
 
 void setup()
 {
     Serial.begin(115200);
-    input.start(0, 1, 2, 3, 4, 5);
+    imu.start();
+    Serial.println("IMU started");
 }
 
 void loop()
 {
-    int8_t throttle = input.getChannel(THROTTLE_CHANNEL);
-    int8_t steering = input.getChannel(STEERING_CHANNEL);
-    int8_t throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
-    int8_t steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
-    Serial.println(throttleValue);
-    Serial.println(steeringValue);
-}
+    imu.update();
+    Serial.print("Accelerometer: ");
+    Serial.print(imu.getAccelX());
+    Serial.print(", ");
+    Serial.print(imu.getAccelY());
+    Serial.print(", ");
+    Serial.println(imu.getAccelZ());
 
-void getInput(Input input)
-{
-    int8_t throttle = input.getChannel(THROTTLE_CHANNEL);
-    int8_t steering = input.getChannel(STEERING_CHANNEL);
+    Serial.print("Gyroscope: ");
+    Serial.print(imu.getGyroX());
+    Serial.print(", ");
+    Serial.print(imu.getGyroY());
+    Serial.print(", ");
+    Serial.println(imu.getGyroZ());
 
-    int8_t throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
-    int8_t steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
-
-    // TODO: Retourner valeurs sur les moteurs
+    delay(1000);
 }

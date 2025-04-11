@@ -1,6 +1,7 @@
 #include <Arduino.h>
-#include "I2Cdev.h"
-#include "MPU6050.h"
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
 
 struct IMU
 {
@@ -9,7 +10,7 @@ struct IMU
     static constexpr int16_t OFFSETS[6] = {0, 0, 0, 0, 0, 0};
     static constexpr int8_t SDA = 9;
     static constexpr int8_t SCL = 10;
-    static constexpr int8_t UPDATE_FREQUENCY = 10;
+    static constexpr int8_t UPDATE_FREQUENCY = 100;
 
     static const int8_t rotationTrustA = 2;
     static const int8_t rotationTrustG = 8;
@@ -32,7 +33,7 @@ struct IMU
         int16_t getYaw();
 
     private:
-        MPU6050 mpu;
+        Adafruit_MPU6050 mpu;
         unsigned long previousTime;
         unsigned long currentTime;
         unsigned long dt;
@@ -56,7 +57,4 @@ struct IMU
         int16_t lastGyroX;
         int16_t lastGyroY;
         int16_t lastGyroZ;
-
-        void updateAccel();
-        void updateGyro();
 };
