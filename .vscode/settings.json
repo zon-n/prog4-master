@@ -1,4 +1,5 @@
 {
+    "livePreview.defaultPreviewPath": "/data/index.html"
     "files.associations": {
         "random": "cpp"
     }
