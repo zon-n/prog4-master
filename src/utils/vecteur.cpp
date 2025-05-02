@@ -1,6 +1,11 @@
 #include "vecteur.h"
 
-double Vecteur2::module2()
+inline double Vecteur2::module2()
 {
     return x * x + y * y;
+}
+
+inline double Vecteur2::getAngle()
+{
+    return atan2(y, x);
 }

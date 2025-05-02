@@ -6,41 +6,29 @@
 class TractionControl
 {
 private:
-    Vecteur2 lastCarbehaviour = {0, 0};
+    Vecteur2 carBehaviour;
+    Vecteur2 lastCarBehaviour;
 
-    const double MAX_DELTA_YAW = 0.5; // maximum yaw rate in rad/s
-    const double MAX_DELTA_THROTTLE = 0.5; // maximum throttle change in m/s^2
+    double inputSteering, outputSteering, setpointSteering;
+    double inputThrottle, outputThrottle;
 
-    const double KP_DIRECTION_X = 0;
-    const double KI_DIRECTION_X = 0;
-    const double KD_DIRECTION_X = 0;
+    int8_t lastThrottle = 0;
+    int8_t lastSteering = 0;
 
-    const double KP_DIRECTION_Y = 0;
-    const double KI_DIRECTION_Y = 0;
-    const double KD_DIRECTION_Y = 0;
+    const double MAX_DELTA_THROTTLE = 0.5; // maximum throttle change between -128 and 127
+    const double MAX_DELTA_STEERING = 0.5; // maximum steering change between -128 and 127
 
-    const double KP_THROTTLE = 0;
-    const double KI_THROTTLE = 0;
-    const double KD_THROTTLE = 0;
+    const double KP_STEERING = 0;
+    const double KI_STEERING = 0;
+    const double KD_STEERING = 0;
 
-    const double KP_TURN_SPEED = 0;
-    const double KI_TURN_SPEED = 0;
-    const double KD_TURN_SPEED = 0;
-
-    PID pidDirectionX;
-    PID pidDirectionY;
-    PID pidThrottle;
-    PID pidTurnSpeed;
-
-    double inputDirectionX, outputDirectionX, setpointDirectionX;
-    double inputDirectionY, outputDirectionY, setpointDirectionY;
-    double inputThrottle, outputThrottle, setpointThrottle;
-    double inputTurnSpeed, outputTurnSpeed, setpointTurnSpeed;
+    PID pidSteering;
 
 public:
     void start();
+    void update(Vecteur2 measuredAccel, int8_t inputThrottle, int8_t inputSteering);
+    void tractionControl(int8_t* throttle, int8_t* steering);
 
-    Vecteur2 adjustDirection(Vecteur2 carBehaviour, Vecteur2 expectedBehaviour);
-    Vecteur2 throttleControl(Vecteur2 carBehaviour);
-    Vecteur2 turnSpeedControl(Vecteur2 carBehaviour);
+    void adjustSteering();
+    void adjustInputDelta();
 };

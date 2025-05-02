@@ -2,35 +2,62 @@
 
 void TractionControl::start()
 {
-    PID pidDirectionX(&inputDirectionX, &outputDirectionX, &setpointDirectionX, KP_DIRECTION_X, KD_DIRECTION_X, KI_DIRECTION_X, DIRECT);
-    PID pidDirectionY(&inputDirectionY, &outputDirectionY, &setpointDirectionY, KP_DIRECTION_Y, KD_DIRECTION_Y, KI_DIRECTION_Y, DIRECT);
-    PID pidThrottle(&inputThrottle, &outputThrottle, &setpointThrottle, KP_THROTTLE, KD_THROTTLE, KI_THROTTLE, DIRECT);
-    PID pidTurnSpeed(&inputTurnSpeed, &outputTurnSpeed, &setpointTurnSpeed, KP_TURN_SPEED, KD_TURN_SPEED, KI_TURN_SPEED, DIRECT);
+    PID PIDSteering(&inputSteering, &outputSteering, &setpointSteering, KP_STEERING, KI_STEERING, KD_STEERING, DIRECT);
 }
 
-Vecteur2 TractionControl::adjustDirection(Vecteur2 carBehaviour, Vecteur2 expectedBehaviour)
+void TractionControl::update(Vecteur2 measuredAccel, int8_t throttle, int8_t steering)
 {
-    // calculer erreur sur x
-    inputDirectionX = carBehaviour.x;
-    setpointDirectionX = expectedBehaviour.x;
-    pidDirectionX.Compute();
-
-    // calculer erreur sur y
-    inputDirectionY = carBehaviour.y;
-    setpointDirectionY = expectedBehaviour.y;
-
-    pidDirectionY.Compute();
-
-    Vecteur2 error = {outputDirectionX, outputDirectionY};
-    return error;
+    this-> inputThrottle = throttle;
+    this-> inputSteering = steering;
+    this->carBehaviour = measuredAccel;
+    this-> inputSteering = steering;
 }
 
-Vecteur2 TractionControl::throttleControl(Vecteur2 carBehaviour)
-{   
-
-}
-
-Vecteur2 TractionControl::turnSpeedControl(Vecteur2 carBehaviour)
+void TractionControl::tractionControl(int8_t* throttle, int8_t* steering)
 {
+    adjustSteering();
+    adjustInputDelta();
 
+    // Convert to int8_t for the output
+    *throttle = int8_t(outputThrottle); 
+    *steering = int8_t(outputSteering);
 }
+
+void TractionControl::adjustSteering()
+{
+    this->inputSteering = map(carBehaviour.getAngle(), -90, 90, -128, 127);
+    this->setpointSteering = inputSteering;
+    pidSteering.Compute();
+}
+
+/**
+ * @brief Adjust the input throttle and steering to avoid sudden changes.
+ */
+
+void TractionControl::adjustInputDelta()
+{
+    if (inputThrottle - lastThrottle > MAX_DELTA_THROTTLE)
+    {
+        outputThrottle = lastThrottle + MAX_DELTA_THROTTLE;
+    }
+    else if(inputThrottle - lastThrottle < -MAX_DELTA_THROTTLE)
+    {
+        outputThrottle = lastThrottle - MAX_DELTA_THROTTLE;
+    }
+
+    if(outputSteering - lastSteering > MAX_DELTA_STEERING)
+    {
+        outputSteering = lastSteering + MAX_DELTA_STEERING;
+    }
+    else if(outputSteering - lastSteering < -MAX_DELTA_STEERING)
+    {
+        outputSteering = lastSteering - MAX_DELTA_STEERING;
+    }
+}
+
+
+
+
+
+
+
