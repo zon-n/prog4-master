@@ -13,31 +13,18 @@
 #define STEERING_MIN_PWM 1000
 #define STEERING_MAX_PWM 2000
 
-Input input;
+Input controllerInput;
 
 void setup()
 {
     Serial.begin(115200);
-    input.start(0, 1, 2, 3, 4, 5);
+    controllerInput.start(0, 1, 2, 3, 4, 5);
 }
 
 void loop()
 {
-    int8_t throttle = input.getChannel(THROTTLE_CHANNEL);
-    int8_t steering = input.getChannel(STEERING_CHANNEL);
-    int8_t throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
-    int8_t steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
-    Serial.println(throttleValue);
-    Serial.println(steeringValue);
 }
 
 void getInput(Input input)
 {
-    int8_t throttle = input.getChannel(THROTTLE_CHANNEL);
-    int8_t steering = input.getChannel(STEERING_CHANNEL);
-
-    int8_t throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
-    int8_t steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
-
-    // TODO: Retourner valeurs sur les moteurs
 }
