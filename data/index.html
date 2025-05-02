@@ -12,13 +12,17 @@
   <header>Projet Intégration H25</header>
   <div class="grid">
     <div class="box" id="telemetrie"></div>
-    <div class="box"></div>
+    <div class="box" id="valuesBox">
+      <p id="throttleDisplay">Throttle: 0</p>
+      <p id="steeringDisplay">Steering: 0</p>
+      <p id="wifiDisplay">WiFi: 0 dBm</p>
+    </div>
     <div class="box circle-box">
       <div class="circle">
         <div class="arrow"></div>
       </div>
     </div>
-    <div class="box" id="chart-second"></div>
+    <div class="box" id="chart-wifi"></div>
   </div>
 
   <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -29,31 +33,31 @@ var chartT = new Highcharts.Chart({
       renderTo: 'telemetrie'
     },
     series: [{
-      name: 'Something else',
+      name: 'Throttle',
       type: 'line',
       data: []
     }],
     title: { text: 'Telemetry' },
     xAxis: { type: 'datetime' },
     yAxis: {
-      title: { text: 'Another Metric' }
+      title: { text: 'Notre throttle input entre 0-100' }
     },
     credits: { enabled: false }
 });
 
   var chart2 = new Highcharts.Chart({
     chart: {
-      renderTo: 'chart-second'
+      renderTo: 'chart-wifi'
     },
     series: [{
-      name: 'Something else',
+      name: 'Signal WIFI',
       type: 'line',
       data: []
     }],
     title: { text: 'WIFI' },
     xAxis: { type: 'datetime' },
     yAxis: {
-      title: { text: 'Another Metric' }
+      title: { text: 'Puissance du signal en ' }
     },
     credits: { enabled: false }
   });

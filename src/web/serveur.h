@@ -28,6 +28,7 @@ public:
     void sendData();
     void getIP();
     void initWifi();
+    void initLittleFS();
     String getTelemetry();
     void updateTelemetry(uint throttle, uint steering);
 };
