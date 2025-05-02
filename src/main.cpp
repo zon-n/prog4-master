@@ -23,21 +23,8 @@ void setup()
 
 void loop()
 {
-    int8_t throttle = controllerInput.getChannel(THROTTLE_CHANNEL);
-    int8_t steering = controllerInput.getChannel(STEERING_CHANNEL);
-    int throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
-    int steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
-    Serial.println(throttleValue);
-    Serial.println(steeringValue);
 }
 
-void drive(Input input)
+void getInput(Input input)
 {
-    int8_t throttle = input.getChannel(THROTTLE_CHANNEL);
-    int8_t steering = input.getChannel(STEERING_CHANNEL);
-
-    int throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
-    int steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
-
-    // TODO: Retourner valeurs sur les moteurs
 }

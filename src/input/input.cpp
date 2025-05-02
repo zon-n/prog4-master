@@ -11,6 +11,7 @@ void Input::start(int8_t ch1Pin, int8_t ch2Pin, int8_t ch3Pin, int8_t ch4Pin, in
     channels[5].initialize(ch6Pin, MIN_CANAL[5], MAX_CANAL[5], DEFAULT_CANAL[5]);
 }
 
-int8_t Input::getChannel(u_int8_t channel) {
+int8_t Input::getChannel(u_int8_t channel)
+{
     return channels[channel - 1].readChannel();
 }
