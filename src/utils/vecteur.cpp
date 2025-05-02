@@ -1,4 +1,5 @@
 #include "vecteur.h"
+#include <cmath>
 
 inline double Vecteur2::module2()
 {
