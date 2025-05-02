@@ -1,10 +1,5 @@
 #include "traction_control.h"
 
-void TractionControl::start()
-{
-    PID PIDSteering(&inputSteering, &outputSteering, &setpointSteering, KP_STEERING, KI_STEERING, KD_STEERING, DIRECT);
-}
-
 void TractionControl::update(Vecteur2 measuredAccel, int8_t throttle, int8_t steering)
 {
     this-> inputThrottle = throttle;
@@ -13,7 +8,15 @@ void TractionControl::update(Vecteur2 measuredAccel, int8_t throttle, int8_t ste
     this-> inputSteering = steering;
 }
 
-void TractionControl::tractionControl(int8_t* throttle, int8_t* steering)
+void TractionControl::start()
+{
+    // Initialize the PID controller
+    pidSteering.SetMode(AUTOMATIC);
+    pidSteering.SetOutputLimits(-128, 127); // Set output limits for steering
+    pidSteering.SetSampleTime(100); // Set sample time to 100ms
+}
+
+void TractionControl::process(int8_t* throttle, int8_t* steering)
 {
     adjustSteering();
     adjustInputDelta();

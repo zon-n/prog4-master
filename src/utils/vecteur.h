@@ -4,6 +4,6 @@ struct Vecteur2
     double y;
 
     inline double module2();
-    inline double getAngle();
+    double getAngle();
 };
 

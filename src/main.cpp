@@ -20,6 +20,13 @@ Input controllerInput;
 TractionControl tractionControl;
 IMU imu;
 
+void drive(int8_t throttle, int8_t steering)
+{
+    analogWriteFrequency(FREQUENCY);                                                         // Set the PWM frequency to 50Hz
+    analogWrite(THROTTLE_PIN, map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM)); // Map the throttle value to the PWM range
+    analogWrite(STEERING_PIN, map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM)); // Map the steering value to the PWM range
+}
+
 void setup()
 {
     Serial.begin(115200);
@@ -49,7 +56,7 @@ void loop()
 
     // Traction control logic 
     tractionControl.update(measuredAccel, throttle, steering);
-    tractionControl.tractionControl(&throttle, &steering);
+    tractionControl.process(&throttle, &steering);
 
     // Ouput telemetry to server 
     // TODO: Implement telemetry output 
@@ -58,11 +65,5 @@ void loop()
     drive(throttle, steering);
 }
 
-void drive(int8_t throttle, int8_t steering)
-{
-    analogWriteFrequency(FREQUENCY); // Set the PWM frequency to 50Hz
-    analogWrite(THROTTLE_PIN, map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM)); // Map the throttle value to the PWM range
-    analogWrite(STEERING_PIN, map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM)); // Map the steering value to the PWM range
-}
 
 

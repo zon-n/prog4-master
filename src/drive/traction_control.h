@@ -22,12 +22,12 @@ private:
     const double KI_STEERING = 0;
     const double KD_STEERING = 0;
 
-    PID pidSteering;
+    PID pidSteering = PID(&inputSteering, &outputSteering, &setpointSteering, KP_STEERING, KI_STEERING, KD_STEERING, DIRECT);
 
 public:
     void start();
     void update(Vecteur2 measuredAccel, int8_t inputThrottle, int8_t inputSteering);
-    void tractionControl(int8_t* throttle, int8_t* steering);
+    void process(int8_t* throttle, int8_t* steering);
 
     void adjustSteering();
     void adjustInputDelta();
