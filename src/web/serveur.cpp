@@ -42,7 +42,7 @@ void Serveur::update()
         events.send("ping", NULL, millis());                // Send a ping event to keep the connection alive
         sendData();// Send telemetry data
         lastTime = millis();
-        sendData();
+        //sendData();
     }
 }
 
@@ -57,6 +57,7 @@ String Serveur::getTelemetry()
     // Get telemetry data
     jsonData["throttle"] = throttle;
     jsonData["steering"] = steering;
+    jsonData["rssi"] = WiFi.RSSI();
 
     // TODO: Add other telemetry data if needed
 
@@ -77,7 +78,7 @@ void Serveur::getIP()
     Serial.println(WiFi.localIP());
 }
 
-void initLittleFS()
+void Serveur::initLittleFS()
 {
     // Initialize LittleFS
     if (!LittleFS.begin())

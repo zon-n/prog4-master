@@ -11,8 +11,8 @@ class Serveur
 {
 private:
     // Private members
-    const char *ssid = "SSID";
-    const char *password = "PASSWORD";
+    const char *ssid = "WiBelieveICanFi";
+    const char *password = "Bill Clinternet ";
 
     JSONVar jsonData;
     ulong lastTime = 0;

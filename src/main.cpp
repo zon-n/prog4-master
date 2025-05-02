@@ -1,43 +1,22 @@
 #include <Arduino.h>
-#include "input/input.h"
+#include <web/serveur.h> // Include the Serveur class header    
 
-#define THROTTLE_PIN 9
-#define STEERING_PIN 10
-
-#define THROTTLE_CHANNEL 3
-#define STEERING_CHANNEL 4
-
-#define THROTTLE_MIN_PWM 1000
-#define THROTTLE_MAX_PWM 2000
-
-#define STEERING_MIN_PWM 1000
-#define STEERING_MAX_PWM 2000
-
-Input input;
+Serveur serveur; // Create an instance of the Serveur class
 
 void setup()
 {
-    Serial.begin(115200);
-    input.start(0, 1, 2, 3, 4, 5);
+    Serial.begin(115200); // Initialize serial communication
+    serveur.getIP();       // Get the IP address of the ESP32
+    delay(1000);           // Delay to allow for WiFi connection
 }
 
 void loop()
 {
-    int8_t throttle = input.getChannel(THROTTLE_CHANNEL);
-    int8_t steering = input.getChannel(STEERING_CHANNEL);
-    int8_t throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
-    int8_t steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
-    Serial.println(throttleValue);
-    Serial.println(steeringValue);
-}
+    serveur.update(); // Update the server
+    delay(100);        // Delay to avoid overwhelming the server
+    // Read the throttle and steering values from the PWM channels
+    uint throttle = random(0, 10); // Simulate throttle input
+    uint steering = random(0, 10); // Simulate steering input
 
-void getInput(Input input)
-{
-    int8_t throttle = input.getChannel(THROTTLE_CHANNEL);
-    int8_t steering = input.getChannel(STEERING_CHANNEL);
-
-    int8_t throttleValue = map(throttle, -128, 127, THROTTLE_MIN_PWM, THROTTLE_MAX_PWM);
-    int8_t steeringValue = map(steering, -128, 127, STEERING_MIN_PWM, STEERING_MAX_PWM);
-
-    // TODO: Retourner valeurs sur les moteurs
+    serveur.updateTelemetry(throttle, steering); // Update telemetry data
 }
