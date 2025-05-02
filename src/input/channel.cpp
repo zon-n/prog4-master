@@ -12,9 +12,9 @@
         return *this;
     }
 
-    inline int8_t Channel::readChannel()
+    int8_t Channel::readChannel()
     {
-        int8_t chValue = pulseIn(pin, HIGH, 30000);
+        int32_t chValue = pulseIn(pin, HIGH, 30000);
         if (chValue < 128)
             return defaultValue;
         return map(chValue, 1000, 2000, minLimit, maxLimit);
