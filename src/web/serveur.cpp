@@ -13,7 +13,7 @@ AsyncEventSource events("/events");
 Serveur::Serveur()
 {
     initWifi();     // Initialize WiFi
-    initLIttleFS(); // Initialize LittleFS
+    initLittleFS(); // Initialize LittleFS
 
     server.on("/", HTTP_GET, [this](AsyncWebServerRequest *request)
               { request->send(LittleFS, "/index.html", "text/html"); });
@@ -77,7 +77,7 @@ void Serveur::getIP()
     Serial.println(WiFi.localIP());
 }
 
-void initLIttleFS()
+void initLittleFS()
 {
     // Initialize LittleFS
     if (!LittleFS.begin())
