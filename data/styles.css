@@ -62,3 +62,9 @@ header {
   border-right: 6px solid transparent;
   border-bottom: 10px solid #00a6a6;
 }
+
+#valuesBox p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  color: #000000;
+}
