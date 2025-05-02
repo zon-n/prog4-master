@@ -12,7 +12,7 @@
         return *this;
     }
 
-    int8_t Channel::readChannel()
+    inline int8_t Channel::readChannel()
     {
         int8_t chValue = pulseIn(pin, HIGH, 30000);
         if (chValue < 128)
@@ -20,7 +20,7 @@
         return map(chValue, 1000, 2000, minLimit, maxLimit);
     }
 
-    bool Channel::readSwitch()
+    inline bool Channel::readSwitch()
     {
         return (readChannel() > 50);
     }
