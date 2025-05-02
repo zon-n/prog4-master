@@ -3,8 +3,8 @@
 
 struct Input
 {
-    static constexpr int8_t MIN_CANAL[6] = {-100, -100, 0, -100, 0, 0};
-    static constexpr int8_t MAX_CANAL[6] = {100, 100, 100, 100, 100, 100};
+    static constexpr int8_t MIN_CANAL[6] = {-128, -128, 0, -128, 0, 0};
+    static constexpr int8_t MAX_CANAL[6] = {127, 127, 127, 127, 127, 127};
     static constexpr int8_t DEFAULT_CANAL[6] = {0, 0, 0, 0, 0, 0};
     Channel channels[6] = {Channel(), Channel(), Channel(), Channel(), Channel(), Channel()};
 
