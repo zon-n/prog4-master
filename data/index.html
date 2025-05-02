@@ -11,12 +11,41 @@
     <div class="topnav">
       <h1>ESP TELEMETRY WEB SERVER</h1>
     </div>
+    
     <div class="content">
-      <div class="card-grid">
-        <div class="card">
-          <p class="card-title"> Wheel Speed Chart</p>
-          <div id="chart-telemetry" class="chart-container"></div>
+      <div class="two-column-layout">
+        <div class="left-column">
+          <div class="card">
+            <p class="card-title">Wheel Speed Chart</p>
+            <div id="chart-telemetry" class="chart-container"></div>
+          </div>
         </div>
+        <div class="right-column">
+          <div class="card">
+            <p class="card-title">Live Sensor Values</p>
+            <div class="data-fields">
+              <div class="data-field">
+                <label for="value1">Value 1</label>
+                <input type="text" id="value1" readonly>
+              </div>
+              <div class="data-field">
+                <label for="value2">Value 2</label>
+                <input type="text" id="value2" readonly>
+              </div>
+              <div class="data-field">
+                <label for="value3">Value 3</label>
+                <input type="text" id="value3" readonly>
+              </div>
+              <div class="data-field">
+                <label for="value4">Value 4</label>
+                <input type="text" id="value4" readonly>
+              </div>
+              <div class="data-field">
+                <label for="value5">Value 5</label>
+                <input type="text" id="value5" readonly>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
     <script src="script.js"></script>

@@ -63,6 +63,27 @@ var chartT = new Highcharts.Chart({
   }
 });
 
+var chart2 = new Highcharts.Chart({
+  chart: {
+    renderTo: 'chart-wifi'
+  },
+  series: [{
+      name: 'Temperature #1',
+      type: 'line',
+      color: '#101D42',
+      marker: {
+        symbol: 'circle',
+        radius: 3,
+        fillColor: '#101D42',
+    }
+}],
+  title: { text: 'WIFI' },
+  xAxis: { type: 'datetime' },
+  yAxis: {
+    title: { text: 'Another Metric' }
+  },
+  credits: { enabled: false }
+});
 
 function plotJSON(jsonValue) {
 
@@ -123,3 +144,23 @@ if (!!window.EventSource) {
     plotJSON(myObj);
   }, false);
 }
+
+const jsonData = {
+  value1: "123 RPM",
+  value2: "45 °C",
+  value3: "3.7 V",
+  value4: "85 %",
+  value5: "OK"
+};
+
+function updateTextBoxes(data) {
+  document.getElementById("value1").value = data.value1;
+  document.getElementById("value2").value = data.value2;
+  document.getElementById("value3").value = data.value3;
+  document.getElementById("value4").value = data.value4;
+  document.getElementById("value5").value = data.value5;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateTextBoxes(jsonData);
+});
