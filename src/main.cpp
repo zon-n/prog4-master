@@ -15,15 +15,26 @@ JSONVar readings;
 
 // Timer variables
 unsigned long lastTime = 0;
-unsigned long timerDelay = 2000;
+unsigned long timerDelay = 100;
+
+int starting1, starting2, starting3, starting4;
 
 // Get Sensor Readings and return JSON object
 String getSensorReadings()
 {
-    readings["sensor1"] = random(0, 10);
-    readings["sensor2"] = random(0, 10);
-    readings["sensor3"] = random(0, 10);
-    readings["sensor4"] = random(0, 10);
+    readings["front_left_input"] = starting1;
+    readings["front_right_input"] = starting2;
+    readings["rear_left_input"] = starting3;
+    readings["rear_right_input"] = starting4;
+    readings["front_left_output"] = starting1 + random(-5, 5);
+    readings["front_right_output"] = starting2 + random(-5, 5);
+    readings["rear_left_output"] = starting3 + random(-5, 5);
+    readings["rear_right_output"] = starting4 + random(-5, 5);
+
+    starting1 = starting1 > 100 ? 0 : starting1 + random(0, 5);
+    starting2 = starting2 > 100 ? 0 : starting2 + random(0, 5);
+    starting3 = starting3 > 100 ? 0 : starting3 + random(0, 5);
+    starting4 = starting4 > 100 ? 0 : starting4 + random(0, 5);
 
     String jsonString = JSON.stringify(readings);
     return jsonString;
@@ -56,10 +67,15 @@ void initWiFi()
     Serial.println(WiFi.localIP());
 }
 
-void setup()
+void serverUpdate()
 {
-    Serial.begin(115200);
-    serverInit();
+    if ((millis() - lastTime) > timerDelay)
+    {
+        // Send Events to the client with the Sensor Readings Every 10 seconds
+        events.send("ping", NULL, millis());
+        events.send(getSensorReadings().c_str(), "new_readings", millis());
+        lastTime = millis();
+    }
 }
 
 void serverInit()
@@ -92,18 +108,27 @@ void serverInit()
     server.begin();
 }
 
-void loop()
+void setup()
 {
-    serverUpdate();
+    Serial.begin(115200);
+    serverInit();
+    starting1 = random(0, 100);
+    starting2 = random(0, 100);
+    starting3 = random(0, 100);
+    starting4 = random(0, 100);
 }
 
-void serverUpdate()
+void loop()
 {
-    if ((millis() - lastTime) > timerDelay)
+    if (WiFi.status() != WL_CONNECTED)
     {
-        // Send Events to the client with the Sensor Readings Every 10 seconds
-        events.send("ping", NULL, millis());
-        events.send(getSensorReadings().c_str(), "new_readings", millis());
-        lastTime = millis();
+        initWiFi();
+    }
+
+    if (millis() - lastTime > timerDelay)
+    {
+        serverUpdate();
     }
 }
+
+
