@@ -6,8 +6,8 @@
 #include <Arduino_JSON.h>
 
 // Replace with your network credentials
-const char *ssid = "DESKTOP-MC5O0GI 6923";
-const char *password = "22]j8M81";
+const char *ssid = "SSID";
+const char *password = "PASSWORD";
 
 AsyncWebServer server(80);
 AsyncEventSource events("/events");
@@ -22,19 +22,13 @@ int starting1, starting2, starting3, starting4;
 // Get Sensor Readings and return JSON object
 String getSensorReadings()
 {
-    readings["front_left_input"] = starting1;
-    readings["front_right_input"] = starting2;
-    readings["rear_left_input"] = starting3;
-    readings["rear_right_input"] = starting4;
-    readings["front_left_output"] = starting1 + random(-5, 5);
-    readings["front_right_output"] = starting2 + random(-5, 5);
-    readings["rear_left_output"] = starting3 + random(-5, 5);
-    readings["rear_right_output"] = starting4 + random(-5, 5);
+    readings["input_x"] = starting1;
+    readings["input_y"] = starting2;
+    readings["output_x"] = starting1 + random(-5, 5);
+    readings["output_y"] = starting2 + random(-5, 5);
 
     starting1 = starting1 > 100 ? 0 : starting1 + random(0, 5);
     starting2 = starting2 > 100 ? 0 : starting2 + random(0, 5);
-    starting3 = starting3 > 100 ? 0 : starting3 + random(0, 5);
-    starting4 = starting4 > 100 ? 0 : starting4 + random(0, 5);
 
     String jsonString = JSON.stringify(readings);
     return jsonString;
@@ -112,10 +106,10 @@ void setup()
 {
     Serial.begin(115200);
     serverInit();
-    starting1 = random(0, 100);
-    starting2 = random(0, 100);
-    starting3 = random(0, 100);
-    starting4 = random(0, 100);
+    starting1 = random(-50, 50);
+    starting2 = random(-50, 50);
+    starting3 = random(-50, 50);
+    starting4 = random(-50, 50);
 }
 
 void loop()
