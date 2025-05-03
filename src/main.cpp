@@ -6,8 +6,8 @@
 #include <Arduino_JSON.h>
 
 // Replace with your network credentials
-const char *ssid = "DESKTOP-MC5O0GI 6923";
-const char *password = "22]j8M81";
+const char *ssid = "FIZZ00493";
+const char *password = "FIZZGe3BD63w";
 
 AsyncWebServer server(80);
 AsyncEventSource events("/events");

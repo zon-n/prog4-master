@@ -5,25 +5,36 @@ var chartT = new Highcharts.Chart({
     type: "bar",
     renderTo: "chart-telemetry",
   },
+
   series: [
     {
-      name: "Input Speed",
+      name: "Vitesse input",
       type: "bar",
-      data: [0, 0, 0, 0],
-      color: "#101D42",
+      data: [
+        { y: 0, color: "#101D42" },
+        { y: 0, color: "#00A6A6" },
+        { y: 0, color: "#8B2635" },
+        { y: 0, color: "#71B48D" },
+      ],
+      color: "303033",
     },
     {
-      name: "Output Speed",
+      name: "Vitesse output",
       type: "bar",
-      data: [0, 0, 0, 0],
-      color: "#00A6A6",
+      data: [
+        { y: 0, color: "#1F4B79" },
+        { y: 0, color: "#00D0D0" },
+        { y: 0, color: "#B64B62" },
+        { y: 0, color: "#A8C6A2" },
+      ],
+      color: "#A9A9A9",
     },
   ],
   title: {
     text: undefined,
   },
   xAxis: {
-    categories: ["Front Left", "Front Right", "Rear Left", "Rear Right"],
+    categories: ["Avant Gauche", "Avant Droit", "Arrière Gauche", "Arrière Droit"],
   },
   yAxis: {
     title: {

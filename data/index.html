@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ESP IOT DASHBOARD</title>
+    <title>Projet d'intégration H25</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" href="favicon.png">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://code.highcharts.com/highcharts.js"></script>
   </head>
-  <body>
+  <body> 
     <div class="topnav">
-      <h1>ESP TELEMETRY WEB SERVER</h1>
+      <h1>Serveur de télémétrie ESP32</h1>
     </div>
     
     <div class="content">
       <div class="two-column-layout">
         <div class="left-column">
           <div class="card">
-            <p class="card-title">Wheel Speed Chart</p>
+            <p class="card-title">Diagrame de vitesses</p>
             <div id="chart-telemetry" class="chart-container"></div>
           </div>
         </div>
         <div class="right-column">
           <div class="card">
-            <p class="card-title">Valeur réels des sensors</p>
+            <p class="card-title">Télémétrie</p>
             <div class="data-fields">
               <div class="data-field">
-                <label for="input-orientation">Input Orientation</label>
+                <label for="input-orientation">Orientation input</label>
                 <input type="text" id="input-orientation" readonly>
               </div>
               <div class="data-field">
-                <label for="output-orientation">Output Orientation</label>
+                <label for="output-orientation">Orientation output</label>
                 <input type="text" id="output-orientation" readonly>
               </div>
               <div class="data-field">
