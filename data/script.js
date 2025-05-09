@@ -7,6 +7,7 @@ var chart1 = new Highcharts.Chart({
     type: "bar",
     renderTo: "chart-telemetry",
   },
+  
   series: [
     {
       name: "Vitesse input",
@@ -34,6 +35,7 @@ var chart1 = new Highcharts.Chart({
   title: {
     text: undefined,
   },
+
   xAxis: {
     categories: [
       "Avant Gauche",
@@ -42,12 +44,63 @@ var chart1 = new Highcharts.Chart({
       "Arrière Droit",
     ],
   },
+
   yAxis: {
     title: {
       text: "Throttle Percentage (%)",
     },
-    min: 0,
+    min: -150,
     max: 150,
+  },
+
+  credits: {
+    enabled: false,
+  },
+});
+
+var chart2 = new Highcharts.Chart({
+  chart: {
+    type: "spline",
+    renderTo: "chart-analysis",
+  },
+
+  series: [
+    {
+      name: "Angle input",
+      type: "spline",
+      color: "#8B2635",
+    },
+    {
+      name: "Angle output",
+      type: "spline",
+      color: "#71B48D",
+    },
+  ],
+
+  title: {
+    text: undefined,
+  },
+
+  xAxis: {
+    title: {
+      text: "Temps",
+    },
+  },
+
+  yAxis: {
+    title: {
+      text: "Angle en degrés",
+    },
+  },
+  plotOptions: {
+    spline: {
+      dataLabels: {
+        enabled: false,
+      },
+      marker: {
+        enabled: false,
+      },
+    },
   },
   credits: {
     enabled: false,
@@ -94,6 +147,10 @@ function plotJSON(jsonValue) {
     wheelData.output.rear_left,
     wheelData.output.rear_right,
   ]);
+
+  // Ajouter les points d'entrée et de sortie au graphique d'analyse
+  chart2.series[0].addPoint(Number(jsonValue["input_y"]));
+  chart2.series[1].addPoint(Number(jsonValue["output_y"]));
 }
 
 function updateTextBoxes(data) {
@@ -102,28 +159,30 @@ function updateTextBoxes(data) {
   xOutput = Number(data.output_x);
   yOutput = Number(data.output_y);
 
-  document.getElementById("input-orientation").value = (
-    Math.atan2(yInput, xInput) *
-    (180 / Math.PI)
-  ).toFixed(2);
-  document.getElementById("output-orientation").value = (
-    Math.atan2(yOutput, xOutput) *
-    (180 / Math.PI)
-  ).toFixed(2);
-  document.getElementById("value3").value = data.value3;
-  document.getElementById("value4").value = data.value4;
+  document.getElementById("input-orientation").value = yInput.toFixed(2);
+  document.getElementById("output-orientation").value = yOutput.toFixed(2);
+  document.getElementById("input-speed").value = xInput.toFixed(2);
+  document.getElementById("output-speed").value = xOutput.toFixed(2);
   document.getElementById("value5").value = data.value5;
 }
 
 function vectorToMecanum(x, y) {
-  speed = Math.sqrt(x * x + y * y);
-  angle = Math.atan2(y, x);
+  speed = x;
+  angle = y;
+
+  vX = Math.round(speed * Math.sin((angle * Math.PI) / 180) * 100) / 100;
+  vY = Math.round(speed * Math.cos((angle * Math.PI) / 180) * 100) / 100;
+  console.log("Vitesse X: ", vX, "Vitesse Y: ", vY);
+
   mecanumSpeed = [
-    speed * Math.cos(angle + Math.PI / 4),
-    speed * Math.sin(angle + Math.PI / 4),
-    speed * Math.cos(angle - Math.PI / 4),
-    speed * Math.sin(angle - Math.PI / 4),
+    Math.round((vY - vX) * 100) / 100, // Avant Gauche
+    Math.round((vY + vX) * 100) / 100, // Avant Droit
+    Math.round((vY + vX) * 100) / 100, // Arrière Gauche
+    Math.round((vY - vX) * 100) / 100, // Arrière Droit
   ];
+  console.log("Mecanum Speed: ", mecanumSpeed);
+  console.log("Vitesse input: ", speed, "Angle: ", angle);
+
   return mecanumSpeed;
 }
 
