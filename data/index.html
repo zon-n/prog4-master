@@ -1,9 +1,68 @@
 <!DOCTYPE html>
 <html>
-<body>
-
-<h1>Projet Intégration H25</h1>
-<p>Par Nikita Prudki et Dan Nguyen</p>
-
-</body>
-</html> 
+  <head>
+    <title>Projet d'intégration H25</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="favicon.png">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+  </head>
+  <body> 
+    <div class="topnav">
+      <h1>Serveur de télémétrie ESP32</h1>
+    </div>
+    
+    <div class="content">
+      <div class="two-column-layout">
+        <div class="left-column">
+          <div class="card">
+            <p class="card-title">Diagramme de vitesses</p>
+            <div id="chart-telemetry" class="chart-container"></div>
+          </div>
+          <div>
+          <a href="/changeKP?value=0.1" class="button"><button class="button">Kp+</button></a>
+          <a href="/changeKP?value=-0.1" class="button"><button class="button">Kp-</button></a>
+          <a href="/changeKD?value=0.1" class="button"><button class="button">Kd+</button></a>
+          <a href="/changeKD?value=-0.1" class="button"><button class="button">Kd-</button></a>
+          <a href="/changeKI?value=0.1" class="button"><button class="button">Ki+</button></a>
+          <a href="/changeKI?value=-0.1" class="button"><button class="button">Ki-</button></a>
+        </div>
+        <div>
+          <label for="kp">KP</label>
+                <input type="text" id="kp" readonly>
+          <label for="ki">KI</label>
+                <input type="text" id="ki" readonly>
+          <label for="kd">KD</label>
+                <input type="text" id="kd" readonly>
+        </div>
+        </div>
+        <div class="right-column">
+          <div class="card">
+            <p class="card-title">Télémétrie</p>
+            <div class="data-fields">
+              <div class="data-field">
+                <label for="input-orientation">Orientation input</label>
+                <input type="text" id="input-orientation" readonly>
+              </div>
+              <div class="data-field">
+                <label for="output-orientation">Orientation output</label>
+                <input type="text" id="output-orientation" readonly>
+              </div>
+              <div class="data-field">
+                <label for="input-speed">Vitesse Input</label>
+                <input type="text" id="input-speed" readonly>
+              </div>
+              <div class="data-field">
+                <label for="output-speed"> Vitesse Output</label>
+                <input type="text" id="output-speed" readonly>
+              </div>
+            </div>
+            <p class="card-title">Diagramme d'Orientation</p>
+            <div id="chart-analysis" class="chart-container"></div>
+          </div> 
+        </div> 
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

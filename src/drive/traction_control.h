@@ -1,34 +1,27 @@
 #include <Arduino.h>
-#include <PID_v1.h>
-#include <Wire.h>
+#include "PID_v1.h"
 #include "utils/vecteur.h"
 
 class TractionControl
 {
-private:
-    Vecteur2 carBehaviour;
-    Vecteur2 lastCarBehaviour;
-
-    double inputSteering, outputSteering, setpointSteering;
-    double inputThrottle, outputThrottle;
-
-    int8_t lastThrottle = 0;
-    int8_t lastSteering = 0;
-
-    const double MAX_DELTA_THROTTLE = 0.5; // maximum throttle change between -128 and 127
-    const double MAX_DELTA_STEERING = 0.5; // maximum steering change between -128 and 127
-
-    const double KP_STEERING = 0;
-    const double KI_STEERING = 0;
-    const double KD_STEERING = 0;
-
-    PID pidSteering = PID(&inputSteering, &outputSteering, &setpointSteering, KP_STEERING, KI_STEERING, KD_STEERING, DIRECT);
-
 public:
-    void start();
-    void update(Vecteur2 measuredAccel, int8_t inputThrottle, int8_t inputSteering);
-    void process(int8_t* throttle, int8_t* steering);
+    double kp_steering = 0.5, ki_steering = 0.0, kd_steering = 0.0;
+    PID steeringPID;
+    bool enabled = true;
 
-    void adjustSteering();
-    void adjustInputDelta();
+    double pitch; // Angle de tangage du véhicule
+
+    Vecteur2 input;
+    Vecteur2 output;
+
+    double speed; // Vitesse du véhicule entre -127 et 128
+
+    double inputAngle;
+    double setpointAngle;
+    double ouputAngle;
+
+    TractionControl();
+    void update(Vecteur2 driverInput, double pitch);
+    Vecteur2 steeringControl();
+    void enable(bool enable);
 };
