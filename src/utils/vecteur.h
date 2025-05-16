@@ -1,16 +1,27 @@
 #include <cmath>
 
-#ifndef VECTEUR_H
-#define VECTEUR_H
+#pragma once
+
+/**
+ * @brief Vecteur2 est une structure représentant un vecteur à deux dimensions
+ */
 struct Vecteur2
 {
     double x;
     double y;
 
+    /**
+     * @brief calcule le module au carré du vecteur pour éviter la racine carrée
+     */
     inline double module2();
-    inline double module();
+
+    /**
+     * @brief calcule l'angle du vecteur
+     */
     double getAngle();
+
+    /**
+     * @brief normalise le vecteur
+     */
     inline Vecteur2 normalize();
 };
-
-#endif // VECTEUR_H
