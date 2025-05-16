@@ -1,7 +1,7 @@
 // Initialisation de l'affichage
 window.addEventListener("load", getReadings);
 
-// Configuration des diagrammes
+// Configuration du diagramme de télémétrie
 var chart1 = new Highcharts.Chart({
   chart: {
     type: "bar",
@@ -58,6 +58,7 @@ var chart1 = new Highcharts.Chart({
   },
 });
 
+// Configuration du diagramme d'analyse
 var chart2 = new Highcharts.Chart({
   chart: {
     type: "spline",
@@ -107,16 +108,19 @@ var chart2 = new Highcharts.Chart({
   },
 });
 
-// Fontions de logique Javascript
-function plotJSON(jsonValue) {
+/**
+ * @description Met à jour le graphique de télémétrie et le graphique d'analyse avec les données JSON
+ * @param {*} jsonData données JSON
+ */
+function plotJSON(jsonData) {
   mecanumSpeedInput = vectorToMecanum(
-    Number(jsonValue["input_x"]),
-    Number(jsonValue["input_y"])
+    Number(jsonData["input_x"]),
+    Number(jsonData["input_y"])
   );
 
   mecanumSpeedOutput = vectorToMecanum(
-    Number(jsonValue["output_x"]),
-    Number(jsonValue["output_y"])
+    Number(jsonData["output_x"]),
+    Number(jsonData["output_y"])
   );
 
   var wheelData = {
@@ -134,6 +138,7 @@ function plotJSON(jsonValue) {
     },
   };
 
+  // Mettre à jour les données du graphique de télémétrie
   chart1.series[0].setData([
     Math.abs(wheelData.input.front_left),
     Math.abs(wheelData.input.front_right),
@@ -149,7 +154,6 @@ function plotJSON(jsonValue) {
   ]);
 
   // Ajouter les points d'entrée et de sortie au graphique d'analyse
-
   if (chart2.series[0].data.length > 75) {
     chart2.series[0].data[0].remove();
   }
@@ -158,36 +162,50 @@ function plotJSON(jsonValue) {
     chart2.series[1].data[0].remove();
   }
 
-  chart2.series[0].addPoint(Number(jsonValue["input_y"]));
-  chart2.series[1].addPoint(Number(jsonValue["output_y"]));
+  chart2.series[0].addPoint(Number(jsonData["input_y"]));
+  chart2.series[1].addPoint(Number(jsonData["output_y"]));
   console.log(chart2.series[0].data);
   console.log(chart2.series[1].data);
 }
 
-function updateTextBoxes(data) {
-  xInput = Number(data.input_x);
-  yInput = Number(data.input_y);
-  xOutput = Number(data.output_x);
-  yOutput = Number(data.output_y);
+/**
+ * @param {*} jsonData données JSON
+ * @description Met à jour les champs de texte avec les valeurs des données JSON
+ */
+function updateTextBoxes(jsonData) {
+  input_speed = Number(jsonData.input_speed);
+  input_orientation = Number(jsonData.input_orientation);
+  output_speed = Number(jsonData.output_speed);
+  output_orientation = Number(jsonData.output_orientation);
 
   document.getElementById("input-orientation").value = yInput.toFixed(2);
   document.getElementById("output-orientation").value = yOutput.toFixed(2);
   document.getElementById("input-speed").value = xInput.toFixed(2);
   document.getElementById("output-speed").value = xOutput.toFixed(2);
-  document.getElementById("kp").value = data.kp.toFixed(2);
-  document.getElementById("ki").value = data.ki.toFixed(2);
-  document.getElementById("kd").value = data.kd.toFixed(2);
+  document.getElementById("kp").value = jsonData.kp.toFixed(2);
+  document.getElementById("ki").value = jsonData.ki.toFixed(2);
+  document.getElementById("kd").value = jsonData.kd.toFixed(2);
 
-  console.log("Input Orientation: ", yInput, "Output Orientation: ", yOutput);
-  console.log("Input Speed: ", xInput, "Output Speed: ", xOutput);
+  console.log(
+    "Input Orientation: ",
+    input_orientation,
+    "Output Orientation: ",
+    output_orientation
+  );
+  console.log(
+    "Input Speed: ", input_speed, 
+    "Output Speed: ", output_speed);
 }
 
-function vectorToMecanum(x, y) {
-  speed = x;
-  angle = y;
-
-  vX = Math.round(speed * Math.sin((angle * Math.PI) / 180) * 100) / 100;
-  vY = Math.round(speed * Math.cos((angle * Math.PI) / 180) * 100) / 100;
+/**
+ * @description Convertit les valeurs d'entrée en vitesse mecanum
+ * @param {*} vitesse vitesse scalaire du véhicule
+ * @param {*} orientation orientation par rapport à la verticale
+ * @returns tableau de vitesse mecanum pour chaque roue [avant gauche, avant droit, arrière gauche, arrière droit]
+ */
+function vectorToMecanum(vitesse, orientation) {
+  vX = Math.round(vitesse * Math.sin((orientation * Math.PI) / 180) * 100) / 100;
+  vY = Math.round(vitesse * Math.cos((orientation * Math.PI) / 180) * 100) / 100;
   console.log("Vitesse X: ", vX, "Vitesse Y: ", vY);
 
   mecanumSpeed = [
@@ -197,12 +215,14 @@ function vectorToMecanum(x, y) {
     Math.round((vY - vX) * 100) / 100, // Arrière Droit
   ];
   console.log("Mecanum Speed: ", mecanumSpeed);
-  console.log("Vitesse input: ", speed, "Angle: ", angle);
+  console.log("Vitesse input: ", vitesse, "Angle: ", orientation);
 
   return mecanumSpeed;
 }
 
-// Fonctions de récupération des données
+/**
+ * @description Récupère les données JSON avec une requête Http
+ */
 function getReadings() {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
