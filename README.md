@@ -27,7 +27,7 @@ Ce projet vise à concevoir une voiture téléguidée optimisée à l'aide d'un 
 
 Les objectifs principaux du projet sont les suivants :
 
-- Concevoir un châssis rigide et léger via un logiciel de CAO, adapté à un modèle de véhicule téléguidé de type Formule 1.
+- Concevoir un châssis rigide et léger via un logiciel de CAO, adapté à un modèle de véhicule téléguidé.
 - Imprimer en 3D et assembler un véhicule fonctionnel, prêt à être testé sur différentes surfaces et en virage.
 - Intégrer des capteurs de mouvement (accéléromètre, gyroscope, magnétomètre) pour analyser la dynamique du véhicule en temps réel.
 - Développer un algorithme de contrôle PID pour améliorer l'adhérence en virage et optimiser les performances du véhicule sur différents types de surface (asphalte, gravier, etc.).
@@ -38,7 +38,7 @@ Les objectifs principaux du projet sont les suivants :
 
 La liste complète du matériel utilisé est disponible dans le fichier `BOM.xlsx`. Voici un aperçu du matériel principal :
 
-- **Châssis** : Imprimé en 3D (modèle basé sur la Formule 1)
+- **Châssis** : Imprimé en 3D
 - **Capteurs** : MPU9250 (accéléromètre, gyroscope, magnétomètre)
 - **Moteur** : Moteur à courant continu contrôlé par PWM
 - **Microcontrôleur** : ESP32 (pour le contrôle des moteurs et la communication Wi-Fi)
@@ -50,16 +50,38 @@ La liste complète du matériel utilisé est disponible dans le fichier `BOM.xls
 
 ## Installation et assemblage
 
+### Modélisation des composantes mécaniques
+
+Les fichiers `.step` contenant les modèles 3D des composantes mécaniques sont situés dans le dossier `/CAD`. Ils peuvent être imprimés en 3D avec une imprimante avec une surface d'impression de au moins 250 x 250 x 250 mm.
+
+Les modèles peuvent êtres importés dans un logiciel de Slicer comme [PrusaSlicer](https://www.prusa3d.com/page/prusaslicer_424/) ou [OrcaSlicer](https://github.com/SoftFever/OrcaSlicer).
+
+Il est recommandé d'imprimer les modèles avec les paramètres suivants:
+
+```* Tête 0.4mm ou 0.6mm
+* 40% Remplissage
+* Remplissage de type Gyroid ou Cubic
+* Au moins 3 murs de remplissage
+* Matériaux recommandés: ABS, ASA
+```
+
 ### Installation des logiciels et librairies
 
 Le projet est développé à l'aide du framework **PlatformIO** pour le développement embarqué et des librairies Arduino.
 
-1. **Installation de PlatformIO** : [https://platformio.org/install](https://platformio.org/install)  
+1. **Installation de PlatformIO** : [https://platformio.org/install](https://platformio.org/install)
+
 2. **Installation de l'Arduino IDE** : [https://www.arduino.cc/en/software](https://www.arduino.cc/en/software)
+
 3. **Librairies nécessaires** :
-   - `MPU9250` : Pour l'interface avec le capteur de mouvement.
-   - `PID_v1` : Pour la gestion de l'algorithme PID.
-   - `WiFi` : Pour la communication sans fil.
+
+* `MPU9250` : pour lire les données de l'accéléromètre, du gyroscope et du magnétomètre
+* `PID` : pour appliquer l'algorithme de régulation PID sur le moteur
+* `ESPAsyncWebServer` : pour créer une interface Web asynchrone sur l'ESP32
+* `AsyncTCP` : utilisé avec `ESPAsyncWebServer` pour la communication réseau
+* `Arduino_JSON` : pour manipuler les données JSON dans les échanges Web
+* `WiFi` : pour connecter l'ESP32 au réseau sans fil
+* `HighCharts` : Libraire Javascript pour la génération de diagrammes. 
    #### Voir les [ressources supplémentaires](#ressources-supplémentaires) pour plus d'informations
 
 ---
@@ -144,8 +166,9 @@ L'algorithme ajuste dynamiquement la puissance des moteurs en fonction de l'adh�
 - La télémétrie en temps réel a permis de visualiser l'impact des réglages PID sur la performance du véhicule
 
 ### Améliorations supplémentaires
-- **Calibration des consantes PID**: Jusqu'à maintenant la calibration des constantes proportionnelles, intégrales et dérivées ont été faites à la main. Dans certains cas, la performance était inférieure après le contrôle PID que sans. Il serait donc envisageable de développer un algorithme de calibration automatique pour trouver les constantes PID optimales pour des conditions variées. 
-- **Incorporation de plus d'information télémétriques pour analyse
+- Calibration des consantes PID: Jusqu'à maintenant la calibration des constantes proportionnelles, intégrales et dérivées ont été faites à la main. Dans certains cas, la performance était inférieure après le contrôle PID que sans. Il serait donc envisageable de développer un algorithme de calibration automatique pour trouver les constantes PID optimales pour des conditions variées. 
+- Incorporation de plus d'information télémétriques pour analyse sur le front-end Javascript du client
+- Optimisation du système mécanique pour réduire les bruits des signaux des capteurs
 
 ---
 
@@ -161,3 +184,4 @@ L'algorithme ajuste dynamiquement la puissance des moteurs en fonction de l'adh�
    * [esp32async/AsyncTCP](https://github.com/ESP32Async/AsyncTCP)
    * [esp32async/ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer)
    * [arduino/ArduinoJSON](https://github.com/arduino-libraries/Arduino_JSON)
+   * [HighChartsJS](https://www.highcharts.com/)
