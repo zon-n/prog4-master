@@ -1,13 +1,15 @@
 # Projet d'intégration SIM H25
 
+#### Note: Voir le répo [slave](https://github.com/zon-n/prog4-slave) pour les informations sur l'appareil slave du projet
+
 ## Table des matières
 
 1. [Présentation](#présentation)  
 2. [Objectifs du projet](#objectifs-du-projet)  
 3. [Matériel utilisé](#matériel-utilisé)  
 4. [Architecture technique](#architecture-technique)  
-5. [Schémas et diagramme de classes](#schémas-et-diagramme-de-classes)
-6. [Installation et assemblage](#installation-et-assemblage)   
+5. [Schémas et diagrammes de classes](#schémas-et-diagrammes-de-classes)
+6. [Installation et assemblage](#installation-et-assemblage)
 7. [Description de l’algorithme de contrôle de traction](#description-de-lalgorithme-de-contrôle-de-traction)  
 8. [Tests et résultats](#tests-et-résultats)  
 9. [Améliorations supplémentaires](#améliorations-supplémentaires)
@@ -86,7 +88,7 @@ Le projet est développé à l'aide du framework **PlatformIO** pour le dévelop
 
 
 ### Accès à la page Web de télémétrie
-Avant d'installer le programme c++ sur le ESP32, il faudra charger les données `html`, `css` et `javascript` sur le système de mémoire interne `LittleFS` du ESP32. Le API de PlatformIO permet d'écrire les fichiers du front end avec le fonction `Upload Filesystem Image` dans l'onglet de l'extension PlatformIO. 
+Avant d'téléverser le programme c++ sur le ESP32, il faudra charger les données `html`, `css` et `javascript` sur le système de mémoire interne `LittleFS` du ESP32. Le API de PlatformIO permet d'écrire les fichiers du front end avec le fonction `Upload Filesystem Image` dans l'onglet de l'extension PlatformIO. 
 
 ![image](images/upload_filesystem.png)
 
@@ -115,7 +117,7 @@ Lorsque le programme sera initialisé, la méthode `setup()` initialisera une in
 ### Modules principaux
 
 1. **Acquisition des données**  
-   - **Capteur MPU9250** : Lecture des valeurs d'accélération, de vitesse angulaire et de champ magnétique pour déterminer la position, la vitesse et l'orientation du véhicule. La combinaison des senseurs est éffectuée par la librairie [MPU9250](https://github.com/hideakitai/MPU9250)
+   - **Capteur MPU9250** : Lecture des valeurs d'accélération, de vitesse angulaire et de champ magnétique pour déterminer la position, la vitesse et l'orientation du véhicule. La combinaison des senseurs pour améliorer la qualité des données est éffectuée par la librairie [MPU9250](https://github.com/hideakitai/MPU9250)
 
 2. **Traitement des données**  
    - **Filtrage et analyse** : Comparaison des données captées par les capteurs avec les objectifs de conduite de l'utilisateur (vitesse, angle de virage, etc.).
@@ -133,6 +135,10 @@ Lorsque le programme sera initialisé, la méthode `setup()` initialisera une in
    - **Graphique de télémétrie**: Affichage graphique de la puissance des moteurs en temps réel
    - **Réglage PID à distance** : Interface Web permettant de modifier les paramètres du PID en temps réel.
    - **Courbe d'analyse** : Affichage graphique des entrées et sorties du système PID pour analyser la performance du véhicule.
+
+---
+
+## Schémas et diagrammes de classes
 
 ---
 
