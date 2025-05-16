@@ -6,8 +6,8 @@
 2. [Objectifs du projet](#objectifs-du-projet)  
 3. [Matériel utilisé](#matériel-utilisé)  
 4. [Architecture technique](#architecture-technique)  
-5. [Installation et assemblage](#installation-et-assemblage)  
-6. [Utilisation](#utilisation)  
+5. [Schémas et diagramme de classes](#schémas-et-diagramme-de-classes)
+6. [Installation et assemblage](#installation-et-assemblage)   
 7. [Description de l’algorithme de contrôle de traction](#description-de-lalgorithme-de-contrôle-de-traction)  
 8. [Tests et résultats](#tests-et-résultats)  
 9. [Améliorations supplémentaires](#améliorations-supplémentaires)
@@ -84,6 +84,30 @@ Le projet est développé à l'aide du framework **PlatformIO** pour le dévelop
 * `HighCharts` : Libraire Javascript pour la génération de diagrammes. 
    #### Voir les [ressources supplémentaires](#ressources-supplémentaires) pour plus d'informations
 
+
+### Accès à la page Web de télémétrie
+Avant d'installer le programme c++ sur le ESP32, il faudra charger les données `html`, `css` et `javascript` sur le système de mémoire interne `LittleFS` du ESP32. Le API de PlatformIO permet d'écrire les fichiers du front end avec le fonction `Upload Filesystem Image` dans l'onglet de l'extension PlatformIO. 
+
+![image](images/upload_filesystem.png)
+
+Il faudra aussi modifier les informations du réseau local désiré dans le fichier `/src/main.cpp`. Les variables `*ssid` et `*password` seront à modifier
+
+Exemple:
+
+```c
+const char *ssid = "SSID";
+const char *password = "PASSWORD";
+```
+
+Changé à 
+
+```c
+const char *ssid = "MY_SSID";
+const char *password = "MY_PASSWORD";
+```
+
+Lorsque le programme sera initialisé, la méthode `setup()` initialisera une instance d'un serveur asynchrome (AsyncWEbServer). L'addresse local du serveur sera imprimée sur la console. Il faudra naviguer à cette addresse sur le réseau local pour y avoir accès. 
+
 ---
 
 ## Architecture technique
@@ -124,21 +148,6 @@ Le projet utilise plusieurs protocoles pour gérer les différents composants :
 
 ---
 
-## Utilisation
-
-Le véhicule est contrôlé à distance via une manette radio et par interface Web. L'utilisateur peut :
-
-#### - Par radio
-
-- Envoyer les commandes de mouvement à l'appareil
-
-#### - Par interface Web
-- Visualiser en temps réel les données télémétriques (vitesses, orientation, correction par PID)
-- Ajuster les paramètres PID pour optimiser la performance du véhicule sur différentes surfaces.
-- Observer les courbes d'analyse et les performances de l'algorithme PID.
-
----
-
 ## Description de l’algorithme de contrôle de traction
 
 L'algorithme de contrôle de traction utilise un **PID** (Proportionnel-Intégral-Dérivé) pour réguler la vitesse des moteurs du véhicule et optimiser son adhérence pendant les virages. Voici un aperçu de son fonctionnement :
@@ -164,6 +173,14 @@ L'algorithme ajuste dynamiquement la puissance des moteurs en fonction de l'adh�
 - Le télémétrie montre une déviation entre l'entrée d'utilisateur et la correction
 - Le véhicule roule droit lors des test élémentaires
 - La télémétrie en temps réel a permis de visualiser l'impact des réglages PID sur la performance du véhicule
+
+#### Exemple de résultat
+
+Avant l'activation de la contrôle de traction, l'appareil Master demande le signal de contrôle reçu par l'appareil Slave par **I2C**. Il renvoie ensuite les données sur la page web et ne corrige pas la donnée. L'entrée de l'utilisateur est donc la même que la sortie sur les moteurs.
+
+![image](images/telemetry-chart.png)
+
+Après l'activation de la contrôle de traction, on voit une déviation entre les entrés d'utilisateurs et la sortie sur les roues. Le signal de contrôle demandé par l'appareil Master du Slave par **I2C** est traité par l'algoritheme de **PID** pour être ensuite renvoyé par **I2C** au slave pour actionner les moteurs. Les données sont ensuites envoyées sur la page web pour analyse.
 
 ### Améliorations supplémentaires
 - Calibration des consantes PID: Jusqu'à maintenant la calibration des constantes proportionnelles, intégrales et dérivées ont été faites à la main. Dans certains cas, la performance était inférieure après le contrôle PID que sans. Il serait donc envisageable de développer un algorithme de calibration automatique pour trouver les constantes PID optimales pour des conditions variées. 
