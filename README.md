@@ -88,7 +88,7 @@ Le projet est développé à l'aide du framework **PlatformIO** pour le dévelop
 
 
 ### Accès à la page Web de télémétrie
-Avant d'téléverser le programme c++ sur le ESP32, il faudra charger les données `html`, `css` et `javascript` sur le système de mémoire interne `LittleFS` du ESP32. Le API de PlatformIO permet d'écrire les fichiers du front end avec le fonction `Upload Filesystem Image` dans l'onglet de l'extension PlatformIO. 
+Avant de téléverser le programme `c++` sur le ESP32, il faudra charger les données `html`, `css` et `javascript` sur le système de mémoire interne `LittleFS` du ESP32. Le API de PlatformIO permet d'écrire les fichiers du front end avec la fonction `Upload Filesystem Image` dans l'onglet de l'extension PlatformIO. 
 
 ![image](images/upload_filesystem.png)
 
@@ -113,6 +113,8 @@ Lorsque le programme sera initialisé, la méthode `setup()` initialisera une in
 ---
 
 ## Architecture technique
+
+![alt text](images/flowchart.png)
 
 ### Modules principaux
 
@@ -184,7 +186,8 @@ L'algorithme ajuste dynamiquement la puissance des moteurs en fonction de l'adh�
 
 Avant l'activation de la contrôle de traction, l'appareil Master demande le signal de contrôle reçu par l'appareil Slave par **I2C**. Il renvoie ensuite les données sur la page web et ne corrige pas la donnée. L'entrée de l'utilisateur est donc la même que la sortie sur les moteurs.
 
-![image](images/telemetry-chart.png)
+![image](images/telemetry-chart2.png)
+![image]({1520D6F0-A3ED-448B-AE1F-AA33ABEE0C6F}.png)
 
 Après l'activation de la contrôle de traction, on voit une déviation entre les entrés d'utilisateurs et la sortie sur les roues. Le signal de contrôle demandé par l'appareil Master du Slave par **I2C** est traité par l'algoritheme de **PID** pour être ensuite renvoyé par **I2C** au slave pour actionner les moteurs. Les données sont ensuites envoyées sur la page web pour analyse.
 
