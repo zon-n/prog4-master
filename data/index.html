@@ -15,28 +15,47 @@
     
     <div class="content">
       <div class="two-column-layout">
+        
+        <!-- Colonne de gauche -->
         <div class="left-column">
+          
+          <!-- Diagramme de vitesses de roues -->
           <div class="card">
             <p class="card-title">Diagramme de vitesses</p>
             <div id="chart-telemetry" class="chart-container"></div>
           </div>
-          <div>
-          <a href="/changeKP?value=0.1" class="button"><button class="button">Kp+</button></a>
-          <a href="/changeKP?value=-0.1" class="button"><button class="button">Kp-</button></a>
-          <a href="/changeKD?value=0.1" class="button"><button class="button">Kd+</button></a>
-          <a href="/changeKD?value=-0.1" class="button"><button class="button">Kd-</button></a>
-          <a href="/changeKI?value=0.1" class="button"><button class="button">Ki+</button></a>
-          <a href="/changeKI?value=-0.1" class="button"><button class="button">Ki-</button></a>
-        </div>
-        <div>
-          <label for="kp">KP</label>
+
+          <!-- Ajustements PID -->
+          <div class="card">
+            <p class="card-title">Ajustements PID</p>
+            <!-- Buttons -->
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
+              <a href="/changeKP?value=0.1"><button>Kp+</button></a>
+              <a href="/changeKP?value=-0.1"><button>Kp-</button></a>
+              <a href="/changeKD?value=0.1"><button>Kd+</button></a>
+              <a href="/changeKD?value=-0.1"><button>Kd-</button></a>
+              <a href="/changeKI?value=0.1"><button>Ki+</button></a>
+              <a href="/changeKI?value=-0.1"><button>Ki-</button></a>
+            </div>
+            <!-- Valeurs du PID -->
+            <div class="data-fields">
+              <div class="data-field">
+                <label for="kp">KP</label>
                 <input type="text" id="kp" readonly>
-          <label for="ki">KI</label>
+              </div>
+              <div class="data-field">
+                <label for="ki">KI</label>
                 <input type="text" id="ki" readonly>
-          <label for="kd">KD</label>
+              </div>
+              <div class="data-field">
+                <label for="kd">KD</label>
                 <input type="text" id="kd" readonly>
+              </div>
+            </div>
+          </div>
         </div>
-        </div>
+
+        <!-- Colonne de droite -->
         <div class="right-column">
           <div class="card">
             <p class="card-title">Télémétrie</p>
@@ -54,15 +73,19 @@
                 <input type="text" id="input-speed" readonly>
               </div>
               <div class="data-field">
-                <label for="output-speed"> Vitesse Output</label>
+                <label for="output-speed">Vitesse Output</label>
                 <input type="text" id="output-speed" readonly>
               </div>
             </div>
+
             <p class="card-title">Diagramme d'Orientation</p>
             <div id="chart-analysis" class="chart-container"></div>
-          </div> 
-        </div> 
+          </div>
+        </div>
+        
+      </div>
     </div>
+    
     <script src="script.js"></script>
   </body>
 </html>

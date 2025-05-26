@@ -114,13 +114,13 @@ var chart2 = new Highcharts.Chart({
  */
 function plotJSON(jsonData) {
   mecanumSpeedInput = vectorToMecanum(
-    Number(jsonData["input_x"]),
-    Number(jsonData["input_y"])
+    Number(jsonData["input_speed"]),
+    Number(jsonData["input_orientation"])
   );
 
   mecanumSpeedOutput = vectorToMecanum(
-    Number(jsonData["output_x"]),
-    Number(jsonData["output_y"])
+    Number(jsonData["output_speed"]),
+    Number(jsonData["output_orientation"])
   );
 
   var wheelData = {
@@ -162,8 +162,8 @@ function plotJSON(jsonData) {
     chart2.series[1].data[0].remove();
   }
 
-  chart2.series[0].addPoint(Number(jsonData["input_y"]));
-  chart2.series[1].addPoint(Number(jsonData["output_y"]));
+  chart2.series[0].addPoint(Number(jsonData["input_orientation"]));
+  chart2.series[1].addPoint(Number(jsonData["output_orientation"]));
   console.log(chart2.series[0].data);
   console.log(chart2.series[1].data);
 }
@@ -178,10 +178,10 @@ function updateTextBoxes(jsonData) {
   output_speed = Number(jsonData.output_speed);
   output_orientation = Number(jsonData.output_orientation);
 
-  document.getElementById("input-orientation").value = yInput.toFixed(2);
-  document.getElementById("output-orientation").value = yOutput.toFixed(2);
-  document.getElementById("input-speed").value = xInput.toFixed(2);
-  document.getElementById("output-speed").value = xOutput.toFixed(2);
+  document.getElementById("input-orientation").value = input_orientation.toFixed(2);
+  document.getElementById("output-orientation").value = output_orientation.toFixed(2);
+  document.getElementById("input-speed").value = input_speed.toFixed(2);
+  document.getElementById("output-speed").value = output_speed.toFixed(2);
   document.getElementById("kp").value = jsonData.kp.toFixed(2);
   document.getElementById("ki").value = jsonData.ki.toFixed(2);
   document.getElementById("kd").value = jsonData.kd.toFixed(2);
