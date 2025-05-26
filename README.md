@@ -140,8 +140,9 @@ Lorsque le programme sera initialisé, la méthode `setup()` initialisera une in
 
 ---
 
-## Schémas et diagrammes de classes
+## Schémas et diagrammes
 
+![alt text](images/master_slave.png)
 ---
 
 ### Protocoles de communication
